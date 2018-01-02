@@ -16,7 +16,7 @@
 
 ## [基本操作](#目录)
 
-```
+```R
 getwd()
 setwd("……")
 q()
@@ -59,6 +59,8 @@ help.search("poisson")
 ```
 mode() # 模式：numeric/character/logical/complex
 typeof() # 类型：double/integer，仅在numeric上有区别，默认为双精度，整型数据需要加“L”
+Inf # ∞
+-Inf # -∞
 ```
 
 ### [向量](#目录)
