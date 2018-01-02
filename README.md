@@ -16,3 +16,11 @@ setwd("……")
 q()
 load()
 ```
+
+```
+# 函数基本格式
+hi.world <- function() {
+cat("Hello World!\n")
+}
+hi.world()
+```
