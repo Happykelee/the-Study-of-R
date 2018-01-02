@@ -12,7 +12,7 @@
 * [基本操作](#基本操作)
 * [数据结构](#数据结构)
   * [模式和类型查看](#模式和类型查看)
-    * [向量](#向量)
+  * [向量](#向量)
 
 ## 基本操作
 
@@ -58,7 +58,7 @@ help.search("poisson")
 
 ```
 mode() # 模式：numeric/character/logical/complex
-typeof() # 类型：double/integer，仅在numeric上有区别，默认为双精度，整型数据需要加“L”
+typeof() # 类型：double/integer，**仅在numeric上有区别，默认为双精度，整型数据需要加“L”**
 ```
 
 ### 向量
