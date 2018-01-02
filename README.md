@@ -14,7 +14,7 @@
   * [模式和类型查看](#模式和类型查看)
   * [向量](#向量)
 
-## 基本操作(#readme)
+## 基本操作(#目录)
 
 ```
 getwd()
@@ -52,14 +52,14 @@ example(exp)
 help.search("poisson")
 ??"poisson"
 ```
-## 数据结构(#readme)
+## 数据结构(#目录)
 
-### 模式和类型查看(#readme)
+### 模式和类型查看(#目录)
 
 ```
 mode() # 模式：numeric/character/logical/complex
 typeof() # 类型：double/integer，仅在numeric上有区别，默认为双精度，整型数据需要加“L”
 ```
 
-### 向量(#readme)
+### 向量(#目录)
 
