@@ -35,7 +35,7 @@ hi.world()
 # 包的使用
 install.packages('')
 installed.packages()
-  colnames(installed.packages()) #查看已经安装的包名
+  colnames(installed.packages()) # 查看已经安装的包名
 available.packages()
 
 search()
@@ -43,17 +43,6 @@ library()
 require()
 ```
 
-```
-# 包的使用
-install.packages('')
-installed.packages()
-  colnames(installed.packages()) #查看已经安装的包名
-available.packages()
-
-search()
-library()
-require()
-```
 ```
 # 帮助
 help(exp)
@@ -68,8 +57,8 @@ help.search("poisson")
 ### 模式和类型查看
 
 ```
-mode() #模式：numeric/character/logical/complex
-typeof() #类型：double/integer，仅在numeric上有区别，默认为双精度，整型数据需要加“L”
+mode() # 模式：numeric/character/logical/complex
+typeof() # 类型：double/integer，仅在numeric上有区别，默认为双精度，整型数据需要加“L”
 ```
 
 ### 向量
