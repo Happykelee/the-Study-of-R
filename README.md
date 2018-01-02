@@ -13,6 +13,7 @@
 * [数据结构](#数据结构)
   * [模式和类型查看](#模式和类型查看)
   * [向量](#向量)
+  * [矩阵](#矩阵)
 
 ## [基本操作](#目录)
 
@@ -72,8 +73,8 @@ NaN # Not a Number
 
 ### [向量](#目录)
 
-1. **在R中，无法随意添加或删除元素，需要给向量重新赋值**
-2. **两个向量进行运算时，R会自动循环补齐**
+1. **在R中，无法随意添加或删除元素，需要给向量重新赋值，后面的矩阵运算遵循相同规则**
+2. **两个向量进行运算时，R会自动循环补齐，后面的矩阵运算遵循相同规则**
 3. **索引向量的语法规则为：向量1[向量2]，负数的下标表示要把相应的元素剔除**
 ```R
 seq() # 简单规律
@@ -114,7 +115,7 @@ all()
 
 # 向量中提取元素
 a <- c(-1, 1, -2, 4, -5, 9)
-b <- a[a<0] # 等同于a<0 a[c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)]
+b <- a[a<0] # 等同于a<0;a[c(TRUE, FALSE, TRUE, FALSE, TRUE, FALSE)]
 a[a<0] <- 0
 
 subset()
@@ -123,4 +124,105 @@ subset()
 which() # 返回元素的位置
  which(a<0)
 ```
+
+### [矩阵](#目录)
+
+1. **在R中，矩阵的行列都是从1开始编号，矩阵是按列存储**
+2. **元素取值或赋值时，和matlab不同：逗号后不用加冒号,使用方括号而不是圆括号**
+```R
+matrix()
+ m <- matrix(c(1,2,3,4,5,6),nrow = 2, ncol = 3)
+ m <- matrix(c(1,2,3,4,5,6),nrow = 2, ncol = 4) # 系统会自动循环补齐
+ m <- matrix(c(1,2,3,4,5,6),nrow = 2)
+ 
+ m[2,] # 元素取值，和matlab不同：逗号后不用加冒号,使用方括号而不是圆括号
+ m[1,1]<-4 # 元素赋值
+ m <- matrix(c(1,2,3,4,5,6),nrow = 2, byrow = TRUE) # 设置byrow矩阵元素按行排列
+ 
+ #矩阵的行列取名
+record <- matrix(c(98,75,86,92,78,95),nrow = 2)
+colnames(record) <- c("Math","Physics","Chemistry")
+rownames(record) <- c("John","Mary")
+record["John", "Physics"]
+
+m[m[,1]%%2==1 & m[,2]%%2==1 & m[,3]%%2==1,,drop=FALSE] # drop=FALSE防止矩阵筛选后降维
+as.matrix() # 将其转换成矩阵
+```
+
+```R
+rowSums()
+colSums()
+
+# 数学意义上的矩阵乘法
+%*%
+
+#矩阵行列的修改，不能岁月已增加或删减矩阵行列
+rbind()
+cbind()
+
+#对行列调用函数
+apply(m, dimcode, f, fargs) # dimcode=1，对每行应用函数，dimcode=2，对每列应用函数，fargs表示可选参数集
+ apply(m, 2, max)
+ 
+ f <- function(x) {x/sum(x)}
+ y <- apply(z,1,f)
+ y <- t(apply(z,1,f)) # 转置结果保持与原矩阵结构相同
+ 
+ # 待调用函数需要多个参数
+ outlier_value <- function(matrix_row, method_opt){
+  if(method_opt==1){return(max(matrix_row))}
+  if(method_opt==0){return(min(matrix_row))}
+  }
+ apply(m,1,outlier_value,1)
+ apply(m,1,outlier_value,0)
+
+# 以下类似函数应用不同的数据结构
+apply()  # 应用于矩阵
+tapply()
+lapply() # 应用于列表
+sapply() # 应用于向量或者列表
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
