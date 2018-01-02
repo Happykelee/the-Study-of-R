@@ -60,8 +60,8 @@ help.search("poisson")
 
 ### [模式和类型查看](#目录)
 
-**1. 在R中，向量的下标从1开始计数（向量长度可以为0）**
-**2. typeof类型仅在numeric上有区别，默认为双精度，整型数据需要加“L”**
+1. **在R中，向量的下标从1开始计数（向量长度可以为0）**
+2. **typeof类型仅在numeric上有区别，默认为双精度，整型数据需要加“L”**
 ```R
 mode() # 模式：numeric/character/logical/complex
 typeof() # 类型：double/integer，仅在numeric上有区别，默认为双精度，整型数据需要加“L”
