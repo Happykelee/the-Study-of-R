@@ -31,6 +31,12 @@
   * [箱线图](#箱线图)
   * [条形图](#条形图)
   * [qq图](#qq图)
+  * [等高线图及三维图](#等高线图及三维图)
+  * [其他](#其他)
+* [概率与统计](#概率与统计)
+  * [基础](#基础) 
+* [重要函数](#重要函数)
+  * [报错警告类](#报错警告类)
 
 ## [基本操作](#目录)
 
@@ -45,6 +51,8 @@ load()
 
 head()
 tail()
+
+colors() # 显示657种所有颜色名称
 
 rm()
  rm(A)
@@ -69,6 +77,7 @@ hi.world()
 # 函数读入和修改
 source()
 edit()
+
 ```
 
 ```R
@@ -132,10 +141,12 @@ unclass() # 拆分数据
  attr(x,"dim") = c(2,3)
  
 str() # 查看数据的内部结构
+range() # 取数据范围
 
 Inf # ∞
 -Inf # -∞
-NA # 缺失
+NA # 缺失值
+NULL # 空值
 NaN # Not a Number（数据不确定）
 ```
 
@@ -154,6 +165,7 @@ sapply() # 应用于列表或数据框，可以返回列表、向量或矩阵
  # is. 判断数据类型，返回TRUE或FALSE
  is.na() # 是否缺失
  is.nan() # 是否不确定
+ is.null() # 是否空
  is.finite() # 是否有限
  is.infinite() # 是否无限
  is.numeric() # 是否数值型数据
@@ -689,12 +701,12 @@ write.table()/write.csv()
 
 ## [统计图形绘制](#目录)
 
-### [绘图基础](#目录)
-
 **参考资料：**
 * R绘图基础（一）：http://bbs.pinggu.org/thread-3162571-1-1.html
 * 第八讲R语言-图形函数： https://wenku.baidu.com/view/6236eb0e7cd184254b353524.html
 * R语言绘图渐进：http://blog.sina.com.cn/s/blog_5de124240101q5vw.html
+
+### [绘图基础](#目录)
 
 #### 绘制设备(Device)
 
@@ -820,24 +832,44 @@ plotline(4,SOUTH)
  -xaxt = "n" # 抑制X轴原标记及文字表达，与axis(side=1, ……)联用
  -yaxt = "n" # 抑制Y轴原标记及文字表达，与axis(side=2, ……)联用
  ……
-
-colors() # 显示657种所有颜色名称
  
-lines() # 在现有的图形上叠加一条密度曲线
 plot()  # 创建一幅新的图形
  -asp #y/x 坐标轴比例
-
-polygon() # 曲线内填充颜色函数
- -border # 边界颜色 F/NA为省略边界色，T/NULL为前景色
+ ……
 curve(expr, from =, to =, …… ) # 绘制函数对应的曲线
-image() # Display a Color Image
+image()
+ 
+```
+ 
+```R
+# 低级图形函数（向已经存在的图形中添加自己定义的信息）
 
+points() 
+lines() # 在现有的图形上叠加一条密度曲线
+abline(a,b) # 绘制斜率为a截距为b的直线
+abline(h=y) # 水平线
+abline(v=x) # 垂直线
+rect(x1,y1,x2,y2) # 绘制长方形
+rug() # 在现有的图形上叠加轴须图
+box() # 为图形增加一个框
+segments(x0,y0,x1,y1) # 两点间加线段
+arrows(x0,y0,x1,y1,angle,code) # 同上，带箭头
+
+text(x,y,labels) # 向指定点添加标记(labels)
+mtext(text, side, line,) # 边空添加文字，line指定添加文字距离绘图区域的行数
 axis() # 坐标表达设置
+ -side # 1=below, 2=left, 3=above and 4=right
+ -at
 title() # 标题
 legend() # 图例
-box() # 为图形增加一个框
+polygon() # 曲线内填充颜色函数
+ -border # 边界颜色 F/NA为省略边界色，T/NULL为前景色
 
-rug() # 轴须图
+locator() # 交互
+
+
+
+
 ```
 
 ### [图像读取及处理](#目录)
@@ -895,6 +927,7 @@ pie()
  percentage <- round(GDP/sum(GDP)*100, 2)
  index <- paste(countries, " ", percentage, "%", sep="")
  pie(GDP, labels = index, clockwise = T, col = rainbow(length(index)), main= "Pie Chart with Percentages")
+ legend('topright', countries, cex=0.8, fill=rainbow(length(index)))
  
 # 三维饼状图
 pie3D() # plotreix程序包
@@ -906,6 +939,7 @@ pie3D() # plotreix程序包
 fan.plot()
  fan.plot(GDP, labels = countries, main = "Fan Plot")
 ```
+
 ### [直方图](#目录)
 
 直方图是一种对数据分布情况进行展示的二维统计图形，横轴将值域划分划分一定数量的组别，纵轴上则显示相应值出现的频数，**与条形图不同**。
@@ -935,7 +969,7 @@ density();plot()
  
  d <- density(mpg)
  plot(d, main = "Density of Miles/Gallon")
- polygon(d, col = "wheat", border = "blue") ###
+ polygon(d, col = "wheat", border = "blue")
  rug(jitter(mpg, amount = 0.01), col = "brown") # jitter()添加小的随机数
  
 # 组间差异
@@ -1024,12 +1058,153 @@ barplot()
 ```
 ### [qq图](#目录)
 
-分位数函数就是相应累积分布函数的反函数。
+分位数函数就是相应累积分布函数的反函数，  
+QQ图(Quantile-Quantile Plot)用于直观验证一组数据是否来自于某个分布。
 
 ```R
+# 累积分布函数及分位数函数(其反函数)
+x <- seq(-3, 3, by = 0.1)
+cdf <- pnorm(x, 0, 1)
+plot(cdf ~ x, ylim = c(-3,3), type = "l", lty = 2, xlab="", ylab="")
+par(new=TRUE)
+plot(qnorm(cdf) ~ cdf, xlim = c(-3,3), type = "l")
+
+qqnorm()/qqline()/qqplot()
+
+ dset = c(83.83, 95.30, 100.67, 105.01, 108.70, 110.28, 117.14, 125.39, 127.91, 142.24)
+ q.dset <- seq(0.05,0.95,by = 0.1)
+ q.norm <- qnorm (q.dset)
+round(q.norm, 2) # 区小数点后两位
+
+ plot(dset ~ q.norm, main = "Normal Q-Q Plot (Manually)", col = "red")
+ par(new = TRUE)
+ qqline(dset)
+ qqnorm(dset, main = "Normal Q-Q Plot (By R)", col = "blue")
+ qqline(dset)
+ 
+ # 验证中央极限定理
+ exponential.pop <- rexp(1000, rate = 1)
+ exp.means <- sapply(1:1000, function(x) mean(sample(exponential.pop, size=15)))
+ my.data <- exp.means[1:50]
+ qqnorm(my.data)
+ qqline(my.data)
+ 
+ # 验证两组数据是否来自同一分布
+ exp.pop <- rexp(100, rate = 1)
+ qqplot(exp.pop, rexp(100, rate = 1))
+ qqplot(exp.pop, rexp(50, rate = 1)) # 两组数据元素不一致，元素个数少的那组数据通过插值方法补齐
+```
+
+### [等高线图及三维图](#目录)
+
+``` R
+# 等高线图
+contour()/filled.contour/image()
+
+ x <- 10*(1:nrow(volcano))
+ x.at <- seq(100, 800, by=100)
+ y <- 10*(1:ncol(volcano))
+ y.at <- seq(100, 600, by=100)
+
+ image(x, y, volcano, col=heat.colors(100),axes=FALSE)
+ # filled.contour(x, y, volcano, col=heat.colors(30),axes=FALSE) # 同时，并绘制图例
+
+ contour(x, y, volcano, levels=seq(90, 200, by=5), add=TRUE, col="brown")  # add=TRUE表示在image()基础上增加等高线
+ # contour(x, y, volcano, axes=FALSE) # 单独绘制出等高线
+
+ axis(1, at=x.at) 
+ axis(2, at=y.at) 
+ box() 
+ title(main="Maunga Whau Volcano", sub = "col=heat.colors(100)", font.main=4) 
+
+# 三维图
+persp()
+
+ persp(x, y, volcano, col=heat.colors(30), theta = 45, phi = 15,r = sqrt(3), d = 1,axes=FALSE)
+
 
 ```
 
+### [其他](#目录)
+
+#### 花瓣点图(sunflowerplot())
+#### interaction.plot(f1, f2, y)
+#### matplot()
+#### pairs()
+
+
+#### coplot()
+
+```R
+# 关于z的每个数值（数值区间）绘制x与y的二元图
+coplot(lat ~ long | depth, data = quakes)
+```
+
+#### 点图/striptchart()
+
+```R
+dotchart()
+ # 数据
+   cars trucks suvs
+ 1    1      2    4
+ 2    3      5    4
+ 3    6      4    6
+ 4    4      5    6
+ 5    9     12   16
+ dotchart(t(autos_data), color=c("red","blue","darkgreen"), main="Dotchart for Autos", cex=0.8)
+ 
+striptchart() # x的值画在同一条直线上
+```
+
+## [概率与统计](#统计)
+
+### [基础](#基础)
+
+
+
+
+## [重要函数](#目录)
+
+### [报错警告类](#目录)
+
+#### try()
+
+在R中编程，可以使用try()函数捕捉错误。
+
+**参考资料：** http://blog.csdn.net/fanfanrenrenmi/article/details/52142395
+
+```R
+fit<-try(auto.arima(index,trace=T),silent=TRUE)
+if('try-error' %in% class(fit)){ 
+ next
+}
+else{
+ forecast<-forecast(fit,h=7,level=c(99.5))
+}
+
+# %in%
+# usage: a %in% table
+# a值是否包含于table中，为真输出TURE，否者输出FALSE
+```
+
+#### 警告
+
+涉及警告的函数或参数众多，常用的有如下几个：
+
+1. **warn**: options()的参数。设置为负数-关闭，设置为0-程序运行结束显示警告信息(default)，设置为1-出现警告信息立即显示，设置为2-警告上升为错误级别
+2. **warnings**：显示警告信息。
+
+```R
+options(warn = -1) # 关闭警告提示
+options('warn' = -1) # 同上
+options(warn = 0) # 开启
+
+for(w in -1:1) {
+   options(warn = w); cat("\n warn =", w, "\n")
+   for(i in 1:3) { cat(i,"..\n"); m <- matrix(1:7, 3,4) }
+}
+warnings() # 输出上述循环的warning信息
+```
 
 
 
