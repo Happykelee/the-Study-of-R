@@ -25,7 +25,7 @@
 * [统计图形绘制](#统计图形绘制)
   * [绘图基础](#绘图基础)
   * [图像读取及处理](#图像读取及处理)
-  * [饼状图](#饼状图) 
+  * [饼状图](#饼状图)
   * [直方图](#直方图)
   * [核密图](#核密图)
   * [箱线图](#箱线图)
@@ -36,7 +36,8 @@
 * [重要函数](#重要函数)
   * [报错警告类](#报错警告类)
 * [概率与统计](https://github.com/Happykelee/the-Study-of-R/blob/master/Probability%20and%20Statistics.md)
-* [机器学习](https://github.com/Happykelee/Machine-Learning/tree/master/R) 
+* [机器学习](https://github.com/Happykelee/Machine-Learning/tree/master/R)
+* [练习小脚本]()
 
 ## [基本操作](#目录)
 
@@ -114,7 +115,7 @@ R是一种基于对象的语言。R的对象分为单纯对象和复合对象两
   * https://www.zhihu.com/question/31486406
   * http://www.cnblogs.com/HeYanjie/p/6292536.html
   * https://uploads.cosx.org/2012/11/ChinaR2012_SH_Nov04_07_WYC.pdf
- 
+
 * **其他参考资料：**
   * R语言学习笔记(2)-数据类型和数据结构: http://developer.51cto.com/art/201305/393125.htm
   * R语言进阶之4-数据整形(reshape)： http://developer.51cto.com/art/201305/396615.htm
@@ -126,6 +127,7 @@ R是一种基于对象的语言。R的对象分为单纯对象和复合对象两
 1. **在R中，向量的下标从1开始计数（向量长度可以为0）；**
 2. **typeof类型仅在numeric上有区别，默认为双精度，整型数据需要加“L”；**
 3. **class()和attr()可以对数据类型进行操作，而且对原数据直接进行修改，而不是返回新的数据。**
+
 ```R
 class() # 类：numeric/character/logical/complex/list/data.frame
 mode() # 模式属性：numeric/character/logical/complex/list/expression……
@@ -139,7 +141,7 @@ unclass() # 拆分数据
  class(x) = "matrix" # 错误
  # 通过函数attributes()和attr()进行操作
  attr(x,"dim") = c(2,3)
- 
+
 str() # 查看数据的内部结构
 range() # 取数据范围
 
@@ -177,7 +179,7 @@ sapply() # 应用于列表或数据框，可以返回列表、向量或矩阵
  is.matrix() # 是否矩阵数据
  is.array() # 是否数组数据
  is.data.frame() # 是否数据框数据
- 
+
  # as. 转换数据类型
  as.numeric()
  as.character()
@@ -211,36 +213,36 @@ reshape()/stack()/unstack() # 数据框/列表的长、宽格式之间转换
         else {
         list(regexp = sep, include = FALSE, fixed = TRUE)}
     )
-    
- x <- data.frame(CK=c(1.1, 1.2, 1.1, 1.5), T1=c(2.1, 2.2, 2.3, 2.1), T2=c(2.5, 2.2, 2.3, 2.1)) 
+
+ x <- data.frame(CK=c(1.1, 1.2, 1.1, 1.5), T1=c(2.1, 2.2, 2.3, 2.1), T2=c(2.5, 2.2, 2.3, 2.1))
  xx <- stack(x)
  unstack(xx)
- 
+
  reshape/reshape2程序包
  melt() # “溶解”数据，会根据数据类型）选择melt.data.frame, melt.array 或 melt.list函数进行实际操作
   # 数组类型
   datax <- array(1:8, dim=c(2,2,2))
   melt(datax)
   melt(datax, varnames=LETTERS[24:26],value.name="Val") # 修改列名
-  
+
   # 列表类型（元素值排列在前，名称在后，越是顶级的列表元素名称越靠后）
-  datax <- list(agi="AT1G10000", GO=c("GO:1010","GO:2020"), KEGG=c("0100", "0200", "0300")) 
+  datax <- list(agi="AT1G10000", GO=c("GO:1010","GO:2020"), KEGG=c("0100", "0200", "0300"))
   melt(datax)
   melt(list(at_0100=datax))
-  
+
   # 数据框类型（相对复杂）
   melt(data, id.vars, measure.vars, variable.name = "variable", ..., na.rm = FALSE, value.name = "value")
   # id.vars是被当做维度的列变量；每个变量在结果中占一列；measure.vars是被当成观测值的列变量，它们的列变量名称和值分别组成variable 和 value两列，列变量名称用variable.name 和 value.name来指定。
-  aq <- melt(airquality, var.ids=c("Ozone", "Month", "Day"), measure.vars=c(2:4), variable.name="V.type", value.name="value") 
-  
+  aq <- melt(airquality, var.ids=c("Ozone", "Month", "Day"), measure.vars=c(2:4), variable.name="V.type", value.name="value")
+
   # var.ids可以写成id，measure.vars可以写成measure。id和即measure.vars这两个参数可以只指定其中一个，剩余的列被当成另外一个参数的值；如果两个都省略，数值型的列被看成观测值，其他的被当成id。
   # 如果想省略参数或者去掉部分数据，参数名最好用id/measure，否则得到的结果很可能不是你要的结果
   melt(airquality, var.ids=1) # 返回非理想结果
   melt(airquality, id=1)
-  
+
  cast() # 还原数据及汇总
  cast(aq, Ozone+Month+Day~V.type)
- cast(aq, Month~V.type, fun.aggregate=mean, na.rm=TRUE) 
+ cast(aq, Month~V.type, fun.aggregate=mean, na.rm=TRUE)
 ```
 
 ### [向量](#目录)
@@ -248,16 +250,17 @@ reshape()/stack()/unstack() # 数据框/列表的长、宽格式之间转换
 1. **在R中，无法随意添加或删除元素，需要给向量重新赋值，后面的矩阵运算遵循相同规则；**
 2. **两个向量进行运算时，R会自动循环补齐，后面的矩阵运算遵循相同规则；**
 3. **索引向量的语法规则为：向量1[向量2]，负数的下标表示要把相应的元素剔除。**
+
 ```R
 seq() # 简单规律
  seq(1, 5, by = 0.5)
  seq(10, 100, length = 10)
- 
+
 rep() # 复杂规律
  rep(1:5, 2)
  rep(1:4, each = 2, times = 3)
  rep(1:4, each = 2, len = 4) #因为长度是4，所以仅取前4项
- 
+
 c() # 没有规则，很常用
 
 assign() # 赋值函数
@@ -321,26 +324,26 @@ factor()
  # 插入数据
  fsample[5]<-100 # 只能添加水平中含有的值
  fsample[6]<-99 # 非法操作
- 
+
 length(fsample) # 返回数据的长度，而非因子的长度
 
 # 因子调用函数
 tapply(X, INDEX, F) # X为原子型对象，INDEX为因子或因子列表（如果不是用as.factor强制转换，长度与X等长，F为应用函数
 
 # INDEX为因子
- wt <- c(46,39,35,42,43,43) 
+ wt <- c(46,39,35,42,43,43)
  group <- c("A","B","C","A","B","C")
  tapply(wt,as.factor(group),mean)
- 
+
  # INDEX为因子列表
  wt <- c(46,39,35,42,43,43,42,44,36,40,39,38)
  diet <- c("A","B","C","A","B","C","A","B","C","A","B","C")
  gender <- c("M","M","M","M","M","M","F","F","F","F","F","F")
  tapply(wt,list(as.factor(diet),as.factor(gender)),mean) # 输出二维矩阵
- 
+
 by(X, INDEX, F) # tapply()函数的变种，X可以是数据框和矩阵
  by(myopia,myopia$degree,function(frame) frame[,2]+frame[,3])
-  
+
 split(X, f) # 形成分组 X为待处理数据，f为因子或因子列表
  split(wt,list(diet,gender))
 ```
@@ -411,6 +414,7 @@ sapply()
 1. **在R中，矩阵的行列都是从1开始编号，矩阵是按列存储；**
 2. **元素取值或赋值时，和matlab不同：逗号后不用加冒号，使用方括号而不是圆括号；**
 3. **drop=FALSE防止矩阵筛选后降维，数据框同样适用。**
+
 ```R
 matrix()
  m <- matrix(c(1,2,3,4,5,6),nrow = 2, ncol = 3)
@@ -420,11 +424,11 @@ matrix()
 array()
  array(1:24, c(2,3,4))
  array(1:24, dim = c(2,3,4))
- 
+
  m[2,] # 元素取值，和matlab不同：逗号后不用加冒号,使用方括号而不是圆括号
  m[1,1]<-4 # 元素赋值
  m <- matrix(c(1,2,3,4,5,6),nrow = 2, byrow = TRUE) # 设置byrow矩阵元素按行排列
- 
+
 # 矩阵的行列取名
 record <- matrix(c(98,75,86,92,78,95),nrow = 2)
 colnames(record) <- c("Math","Physics","Chemistry")
@@ -453,11 +457,11 @@ cbind()
 #对行列调用函数
 apply(m, dimcode, f, fargs) # dimcode=1，对每行应用函数，dimcode=2，对每列应用函数，fargs表示可选参数集
  apply(m, 2, max)
- 
+
  f <- function(x) {x/sum(x)}
  y <- apply(z,1,f)
  y <- t(apply(z,1,f)) # 转置结果保持与原矩阵结构相同
- 
+
  # 待调用函数需要多个参数
  outlier_value <- function(matrix_row, method_opt){
   if(method_opt==1){return(max(matrix_row))}
@@ -472,6 +476,7 @@ apply(m, dimcode, f, fargs) # dimcode=1，对每行应用函数，dimcode=2，�
 数据框（和矩阵相似）有行列两个维度，“列”表示变量，“行”表示变量的观察记录。  
 数据框的每列可以是不同的模式(mode)，更像是列表的扩展。每列相当于一个向量（列表），向量长度一致，如果不一致会按“循环补齐”原则补充完整。
 1. **在数据框进行行列添加时，rbind(),cbind(),transform()和within()会返回一个新的数据框，并不会对原数据框做任何更改，frame$newcolumm会对原数据直接进行修改。**
+
 ```R
 data.frame(……, stringAsFactors = T) # 默认情况下会将向量转化为因子
  male <- c(124,88,200)
@@ -500,7 +505,7 @@ sub <- myopia[2,1:2] # 单取一行，返回类型仍为数据框
 sub <- myopia[2:3,2] # 单取一列，返回类型为向量
  sub <- myopia[2:3,2,drop=F] # 设置drop=F时,返回类型为数据框
  sub <- myopia[2]; sub <- sub[2:3,1] # 效果同上
- 
+
 myopia[c("male", "female")]
 myopia[male>100,]
 
@@ -517,13 +522,13 @@ students$gender <- NULL # 同上
 
 transform()
  aq <- transform(airquality, log.ozone=log(Ozone), Ozone=NULL, Wind=Wind^2) # 增加/删除/修改
- 
+
 within()
- aq <- within(airquality, { 
-    log.ozone <- log(Ozone) 
-    squared.wind <- Wind^2 
-    rm(Ozone, Wind) 
- } ) 
+ aq <- within(airquality, {
+    log.ozone <- log(Ozone)
+    squared.wind <- Wind^2
+    rm(Ozone, Wind)
+ } )
 
 # 数据框合并
 merge()
@@ -532,7 +537,7 @@ merge()
  merge(students,students3,by.y="na",by.x="names",all.x=T) # 默认情况下all.x、all.y和all为FALSE，如果设置为TRUE，则会包含所有元素，缺失值取为NA
  merge(students,students3,by.y="na",by.x="names",all.y=T)
  merge(students,students3,by.y="na",by.x="names",all=T)
- 
+
 # 数据框调用函数
 apply(tt[,2:3,drop=F],2,mean)
 lapply(students,sort)
@@ -544,6 +549,7 @@ sapply(students,sort)
 表和矩阵或数据框十分相似，对表进行过复杂的操作都可以类比矩阵或数据框。
 1. **table()的原理是使用交叉分类因子创建列联表，记录每一个因子水平组合的频数；**
 2. **使用apply()和addmargins()计算表中变量的边际值，需要注意表的维度。**
+
 ```R
 table()
 # 使用交叉分类因子创建列联表，记录每一个因子水平组合的频数
@@ -552,7 +558,7 @@ table()
  table(artery$Diabetes)
  table(list(artery$Diabetes,artery$Hypertension))
  table(D=artery$Diabetes,H=artery$Hypertension,S=artery$Ever_smoked)
- 
+
 # 表中变量的边际值，同时注意高维表的边际值计算
 dh_tab <- table(list(D=artery$Diabetes,H=artery$Hypertension))
  # 使用apply()函数
@@ -575,7 +581,6 @@ loadNamespace()里算'rJava'时.onLoad失败了，详细内容：
 错误: JAVA_HOME cannot be determined from the Registry  
    * **解决方法：使用R 32-bit系统**
 
-
 ```R
 attach() # 用于直接读取列表的变量
 detach() # 解除
@@ -595,9 +600,9 @@ read.table()/read.csv()/read.delim()
  -row.names
  -col.names
  -na.string # default = NA, 赋给缺失数据的值
- 
+
  read.delim("clipboard") # 读取剪贴板数据
- 
+
 read.fwf # 逐行读入数据
  -widths # 设置变量的宽度
 ```
@@ -626,35 +631,35 @@ readHTMLTable() #XML安装包
   -sqlDrop()   #
   -sqlClear()  #
   ……
-  
+
  channel = odbcConnectExcel2007("c:/car.xlsx")
  sqlTables(channel)
  sqlFetch(channel, "Sheet1")
  data_excel2 = sqlQuery(channel, "select * from[Sheet1$]")
  close(channel) # 等同于odbcClose(channel)
- 
+
  # xlsx安装包（需要依赖于rJava包）
  read.xlsx()
  read.xlsx2()
   -sheetIndex # sheet索引号
   ……
-  
+
  table_test <- read.xlsx("D:/R/xlsx.xlsx",1)
- 
+
  # openxlsx安装包（不能读取.xls文件）
  read.xlsx()
  write.xlsx()
   -sheetIndex # sheet索引号
   ……
-  
+
  table_test <- read.xlsx("D:/R/xlsx.xlsx",1)
- 
+
  # gdata包（电脑需要安装Perl）
  read.xls()
- 
+
  # readxl包
  read_excel()
- 
+
 # 处理数据库数据
 略
 ```
@@ -666,9 +671,10 @@ cat()
  car = file("d:/car.txt")
  cat("Make lp100km mass.kg List.price", "\"Alpha Romeo\" 9.5 1242 38500", "\"Audi A3\" 8.8 1160 38700", file = car, sep = "\n")
  close(car)
- 
+
 write.table()/write.csv()
 ```
+
 ### [缺失值处理](#目录)
 
 ```R
@@ -677,22 +683,22 @@ write.table()/write.csv()
   air_data = airquality[1:7,1:4]
   is.na(air_data)
   sum(is.na(air_data))
-  
+
  complete.cases() # 取值与is.na()相反
   complete.cases(air_data) # 判定的是矩阵每一行是否完整
   complete.cases(air_data$Ozone) # 判定的是单独某列是否完整
-  
+
  aggr() #缺失数据可视化（VIM程序包）
   library(VIM)
   air_data = airquality[1:31,1:4]
   aggr(air_data, las = 1, numbers = TRUE)
-  
+
 # 缺失样本删除
  air_data[complete.cases(air_data),]
  air_data[(!is.na(air_data$Ozone))&(!is.na(air_data$Solar.R)),]
  no.omit()
   na.omit(air_data)
-  
+
 # 缺失值替换
  air_data2 = air_data
  air_data2$Ozone[is.na(air_data2$Ozone)] = median(air_data$Ozone[!is.na(air_data$Ozone)])
@@ -712,15 +718,14 @@ write.table()/write.csv()
 
 R语言中的绘图设备有多种，但可以分为两类，一类是绘图文件，另一类是绘图窗口。另外，R绘图的工作方式与变量、数据和函数等对象的处理形式大为不同，绘图结果不能复制给一个对象，而是直接输出到绘图设备中。
 
-
 ```R
 windows()/dev.new(…)/win.graph()/X11() # 打开一个新的图形设备
 png()/jpeg()/pdf()/bmp()/tiff()/postscript() # 打开一种绘图文件类型
-dev.list() # 显示当前打开的所有图形设备编号 
-dev.cur() # 显示当前活动的图形设备 
+dev.list() # 显示当前打开的所有图形设备编号
+dev.cur() # 显示当前活动的图形设备
 dev.set(…) # 切换活动图形设备号
 dev.off() # 关闭指定设备号
-graphics.off() # 关闭所有绘图窗口和图形设备 
+graphics.off() # 关闭所有绘图窗口和图形设备
 ```
 
 #### 布局
@@ -734,14 +739,14 @@ par() # 图形参数永久设置，par()（括号中不写任何参数）返回�
  -oma # 外围边距，oma(out margin area)，行高(line)为单位
  -mfrow # mfrow = c(nr,nc), nr*nc矩阵布局，按行次使用窗口
  -mcol # mcol = c(nr,nc), nr*nc矩阵布局，按列次使用窗口
- 
+
 split.screen() # 图形分割（可不规则划分），mfrow,mfcol可进行矩阵布局
 close.screen(all = TRUE) # 退出
-erase.screen() # 
+erase.screen() #
 screen() # 预备输出
 
 layout()
- -widths 
+ -widths
  -heights
  ……
  layout(matrix(c(1,1,2,3), 2, 2, byrow = TRUE)) # 布局第一排有一个图，第二排有两个图
@@ -804,11 +809,11 @@ plotline(4,SOUTH)
  # 绘制参数之绘图区域（主绘图）
  -fig # 任意未知作图（左下角(0,0),右上角(1,1)）
  -new # 是否在原画布基础上作图
- 
+
  -bg # 背景色
  -bty # 图形边框形状, 'n'(不绘制表框)
  -pty # 's'正方形，'m'最大利用 ！par()设置
- 
+
  -adj # 字符位置：0(left), 0.5(center,default), 1(right)
  -tck # 轴上刻度长度值（百分比），tck=1,绘制grid  ！仅暂时性设置
  -tcl # 轴上刻度长度值（行高），tcl=0.5(default)
@@ -821,30 +826,30 @@ plotline(4,SOUTH)
   -*.sub  # 坐标轴副标题文字大小/颜色/字体
  -ps # 控制整体文字的大小  ！par()设置
  -las # 坐标轴刻度数字标记方向的整数， 0(平行于轴), 1(横排), 2(垂直于轴), 3(竖排)
- 
+
  -type # 'p'(绘制单独点default),'l'(线),'b'(both),’c'(点线图去掉点),'o'(点绘在线上),'h'(从点到零轴的垂线(high-density)),'s'/'S'(阶梯式图),'n'(不绘制,坐标轴是绘出)
  -lty # 线型 (0=blank, 1=solid (default), 2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash)
  -pch # points符号类型，1-25,21-25可以加颜色，或者使用字符
  -lwd # 宽度
- 
+
  -log # 坐标对数化
  -axes = FALSE # 无坐标轴
  -xaxt = "n" # 抑制X轴原标记及文字表达，与axis(side=1, ……)联用
  -yaxt = "n" # 抑制Y轴原标记及文字表达，与axis(side=2, ……)联用
  ……
- 
+
 plot()  # 创建一幅新的图形
  -asp #y/x 坐标轴比例
  ……
 curve(expr, from =, to =, …… ) # 绘制函数对应的曲线
 image()
- 
+
 ```
- 
+
 ```R
 # 低级图形函数（向已经存在的图形中添加自己定义的信息）
 
-points() 
+points()
 lines() # 在现有的图形上叠加一条密度曲线
 abline(a,b) # 绘制斜率为a截距为b的直线
 abline(h=y) # 水平线
@@ -866,10 +871,6 @@ polygon() # 曲线内填充颜色函数
  -border # 边界颜色 F/NA为省略边界色，T/NULL为前景色
 
 locator() # 交互
-
-
-
-
 ```
 
 ### [图像读取及处理](#目录)
@@ -893,7 +894,7 @@ with(rgbImage,plot(X2, X1, col = rgb(colorColumns), asp = 1, pch =".",axes=F,xla
 plot(rgbImage$X2, -rgbImage$X1, col = rgb(rgbImage[3:5]), asp = 1, pch =".",axes=F,xlab='',ylab='')
 
 # 图像模糊处理
-rgbAlter<- rgbImage 
+rgbAlter<- rgbImage
 rgbAlter$X2<- jitter(rgbAlter$X2)
 rgbAlter$X1<- jitter(rgbAlter$X1)
 rgbAlter$Size<- runif(1:nrow(rgbAlter), 0, 2) # and random point sizes
@@ -901,7 +902,7 @@ with(rgbAlter,plot(X2, X1, col = rgb(colorColumns), asp = 1, cex = Size, axes=F,
 
 # 去除绿色
 rgbAlter<- rgbImage
-rgbAlter[,4] <- 0 
+rgbAlter[,4] <- 0
 with(rgbAlter,plot(X2, X1, col = rgb(rgbAlter[, 3:5]), asp = 1, pch = ".",axes=F,xlab='',ylab=''))
 
 # 曝光处理
@@ -921,20 +922,20 @@ pie()
  -clockwise # T为顺时针，F为逆时针
  -col # 颜色
  -border # 边界颜色 F/NA为省略边界色，T/NULL为前景色 ###
- 
+
  countries <- c("Brazil","Russia","India","China","South Africa")
  GDP <- c(23920, 20790, 18618, 94906, 3660)
  percentage <- round(GDP/sum(GDP)*100, 2)
  index <- paste(countries, " ", percentage, "%", sep="")
  pie(GDP, labels = index, clockwise = T, col = rainbow(length(index)), main= "Pie Chart with Percentages")
  legend('topright', countries, cex=0.8, fill=rainbow(length(index)))
- 
+
 # 三维饼状图
 pie3D() # plotreix程序包
  - explode # 扇片间距
- 
+
  pie3D(GDP, labels = countries, explode = 0.1, main = "3D Pie Chart")
- 
+
 # 扇形图
 fan.plot()
  fan.plot(GDP, labels = countries, main = "Fan Plot")
@@ -951,11 +952,11 @@ hist()
  -xlim/ylim
  -freq # 设置为F，根据概率密度而不是频数绘制图形，实现直方图归一化
  ……
- 
+
  hist(mpg, breaks = 12, xlim = c(10, 35), xlab = "Miles/Gallon", main = "Histogram Example")
  hist(mpg, breaks = c(2*5:9, 5*4:7), col = "blue1", ylim = c(0, 0.12), xlab = "Miles/Gallon", main = "Example with Non-equidistant Breaks") # 不等距划分，且直方图归一化
  hist(mpg, breaks = 12, col = "blue1", ylim = c(0, 0.12), xlim = c(10, 35), freq = FALSE, xlab = "Miles/Gallon", main = "Histogram Example of Density ")
-  
+
  h <- hist(mpg, breaks = 12, col = "blue", xlim = c(10, 35), xlab = "Miles/Gallon", main = "Histogram Example with Normal Curve")
  xfit <- seq(min(mpg), max(mpg), length = length(mpg)) # 曲线是根据原始数据的均值和标准差估算出来的正态分布曲线所画
  yfit <- dnorm(xfit, mean=mean(mpg), sd=sd(mpg))
@@ -966,12 +967,12 @@ hist()
 
 ```R
 density();plot()
- 
+
  d <- density(mpg)
  plot(d, main = "Density of Miles/Gallon")
  polygon(d, col = "wheat", border = "blue")
  rug(jitter(mpg, amount = 0.01), col = "brown") # jitter()添加小的随机数
- 
+
 # 组间差异
 plot(density(mtcars[mtcars$cyl==4, ]$mpg), col = "red", lty = 1, xlim = c(5, 40), ylim = c(0, 0.25), xlab = "", main = "")
 par(new = TRUE) ###
@@ -997,7 +998,7 @@ legend("topright", legend = text.legend, lty=c(1,2,3), col = c("red", "blue", "g
 ```R
 boxplot()
  boxplot(mpg, main="Box plot", ylab="Miles per Gallon")
- 
+
 boxplot.stats(x, coef = 1.5, do.conf = TRUE, do.out = TRUE) # 仅输出统计结果，不画图
  -coef # default = 1.5 "须"长度的极限值，1.5倍四分位距；设置为0，上升至数据集的极限（最大值最小值）
  # 输出结果参数
@@ -1005,7 +1006,7 @@ boxplot.stats(x, coef = 1.5, do.conf = TRUE, do.out = TRUE) # 仅输出统计结
  - n # 非缺失值的个数
  -conf # 中位数95%的置信区间
  -out # 异常值
- 
+
 # 返回五个指标的函数
 fivenum<-function(x){
  x<-sort(x)
@@ -1034,24 +1035,27 @@ boxplot(mpg ~ am.f*cyl.f, data = mtcars, varwidth = TRUE, col = c("wheat", "oran
 
 ```R
 barplot()
+  - height # 要求为矩阵或者向量
+  - names.arg # 添加条形名称
+
  # Vertical
  my.data <- c(5.87, 7.94, 3.77, 7.41, 5.37)
  names(my.data) <-c("US", "Japan", "China", "Brazil", "India") # 可用barplot()
- 函数中names.arg参数替换 
+ 函数中names.arg参数替换
  barplot(my.data, ylim = c(0,round(max(my.data))), main = "Barplot Example (Vertical)", xlab = "Countries", ylab = "GDP per Energy")
- 
+
  # Horizontal(,horiz = TRUE)
  barplot(my.data, xlim = c(0,round(max(my.data))),horiz = TRUE, main = "Barplot Example (Horizontal)", xlab = "GDP per Energy", ylab = "Countries")
- 
+
  # 堆砌
  my.data <- matrix(c(38.1, 1.7, 27.8, 28.7, 34.1, 69.6), nrow = 2)
  rownames(my.data) <- c("China", "Germany")
  colnames(my.data) <- c("primary","secondary","tertiary")
  barplot(my.data, main = "Grouped Barplot", col = c("wheat", "orange"), legend = rownames(my.data), args.legend = list(x = "top"))
- 
+
  # 并列(beside = TRUE)
  barplot(my.data, main = "Grouped Barplot", col = c("wheat", "orange"), beside = TRUE, legend = rownames(my.data), args.legend = list(x = "top"))
- 
+
  # 棘状图
  library(vcd)
  spine(my.data, main="Employment in Three Industries")
@@ -1081,14 +1085,14 @@ round(q.norm, 2) # 区小数点后两位
  qqline(dset)
  qqnorm(dset, main = "Normal Q-Q Plot (By R)", col = "blue")
  qqline(dset)
- 
+
  # 验证中央极限定理
  exponential.pop <- rexp(1000, rate = 1)
  exp.means <- sapply(1:1000, function(x) mean(sample(exponential.pop, size=15)))
  my.data <- exp.means[1:50]
  qqnorm(my.data)
  qqline(my.data)
- 
+
  # 验证两组数据是否来自同一分布
  exp.pop <- rexp(100, rate = 1)
  qqplot(exp.pop, rexp(100, rate = 1))
@@ -1112,10 +1116,10 @@ contour()/filled.contour/image()
  contour(x, y, volcano, levels=seq(90, 200, by=5), add=TRUE, col="brown")  # add=TRUE表示在image()基础上增加等高线
  # contour(x, y, volcano, axes=FALSE) # 单独绘制出等高线
 
- axis(1, at=x.at) 
- axis(2, at=y.at) 
- box() 
- title(main="Maunga Whau Volcano", sub = "col=heat.colors(100)", font.main=4) 
+ axis(1, at=x.at)
+ axis(2, at=y.at)
+ box()
+ title(main="Maunga Whau Volcano", sub = "col=heat.colors(100)", font.main=4)
 
 # 三维图
 persp()
@@ -1152,16 +1156,9 @@ dotchart()
  4    4      5    6
  5    9     12   16
  dotchart(t(autos_data), color=c("red","blue","darkgreen"), main="Dotchart for Autos", cex=0.8)
- 
+
 striptchart() # x的值画在同一条直线上
 ```
-
-## [概率与统计](#统计)
-
-### [基础](#基础)
-
-
-
 
 ## [重要函数](#目录)
 
@@ -1175,7 +1172,7 @@ striptchart() # x的值画在同一条直线上
 
 ```R
 fit<-try(auto.arima(index,trace=T),silent=TRUE)
-if('try-error' %in% class(fit)){ 
+if('try-error' %in% class(fit)){
  next
 }
 else{
@@ -1205,38 +1202,3 @@ for(w in -1:1) {
 }
 warnings() # 输出上述循环的warning信息
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
