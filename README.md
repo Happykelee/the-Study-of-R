@@ -1190,6 +1190,7 @@ else{
 
 1. **warn**: options()的参数。设置为负数-关闭，设置为0-程序运行结束显示警告信息(default)，设置为1-出现警告信息立即显示，设置为2-警告上升为错误级别
 2. **warnings**：显示警告信息。
+3. **suppressWarnings**: 忽略警告信息
 
 ```R
 options(warn = -1) # 关闭警告提示
@@ -1201,4 +1202,6 @@ for(w in -1:1) {
    for(i in 1:3) { cat(i,"..\n"); m <- matrix(1:7, 3,4) }
 }
 warnings() # 输出上述循环的warning信息
+
+suppressWarnings(dnorm(data, params[1], params[2]))
 ```
