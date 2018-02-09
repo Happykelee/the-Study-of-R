@@ -317,6 +317,14 @@ factor()
  assessment <- c("weak","good","limited","fair")
  assessment1 <- factor(assessment, order=TRUE, levels=c("good","fair","limited","weak")) # 有序型变量 参数order = T, 并设置参数levels
 
+gl()
+# 生成因子水平
+ -n # 为因子水平
+ -k # 表示重复次数
+ -length # 表示总观察值
+#e.g.
+ A <- gl(3, 6)
+
 # 因子插入
  # 创建时可插入任一水平
  sample <- c(12,15,7,10)
