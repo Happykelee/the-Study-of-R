@@ -62,7 +62,7 @@ rfunc(x, ... ,) # 随机数函数
 |:-----------------:|:---------------------------:|
 |[参数估计](#参数估计)|点估计：矩方法/极大似然估计    |
 |                   |区间估计                      |
-|假设检验            |[参数假设检验](#参数建假设检验)|
+|假设检验            |[参数假设检验](#参数假设检验)|
 |                   |[非参数假设检验](#非参数假设检验)|
 
 ### [参数估计](#目录)
@@ -527,7 +527,7 @@ $F_{A\times{B}} = \frac{MS_{A\times{B}}}{MS_E} = \frac{SS_{A\times{B}}/(r-1)(s-1
  # 借助lm()执行有交互的双因素方差分析
  pancakes.lm <- lm(quality ~ supp * whey, data = pancakes)
  anova(pancakes.lm)
- 
+
  my.aov <- aov(quality ~ supp * whey, data = pancakes)
  summary(my.aov) # 与上述的代码功能一致
 ```
