@@ -564,11 +564,11 @@ Dunnett检验法是一种与对照组进行多重比较的方法。当进行多�
 X <- c(4.2, 3.3, 3.7, 4.3, 4.1, 3.3, 4.5, 4.4, 3.5, 4.2, 4.6, 4.2, 5.6, 3.6, 4.5, 5.1, 4.9, 4.7)
 group <- factor(rep(LETTERS[1:3], each=6))
 mice.data <- data.frame(X, group)
-mice.aov <- aov(X~group, data = my.data)
+mice.aov <- aov(X~group, data = mice.data)
 mice.mean <- round(tapply(mice.data[,1], mice.data[,2], mean), 3)
-mice.MSE = summary(my.aov)[[1]]$`Mean Sq`[2]
+mice.MSE = summary(mice.aov)[[1]]$`Mean Sq`[2]
 (tBD = abs(mice.mean['A']-mice.mean['B'])/sqrt(mice.MSE*(1/6+1/6)))
-(tBD = abs(mice.mean['A']-mice.mean['C'])/sqrt(mice.MSE*(1/6+1/6)))
+(tCD = abs(mice.mean['A']-mice.mean['C'])/sqrt(mice.MSE*(1/6+1/6)))
 
 glht() # 用该函数完成Dunnett检验
 library(multcomp)
@@ -583,10 +583,38 @@ mtext("Dunnet's Method",side=3,line=0.5)
 
 **3. Tukey的HSD检验**
 
-该方法为了控制每一对比较的错误率。  
+该方法为了控制每一对比较的错误率。
+
 在进行检验时，首先对g个样本均值进行排序。如果$|\bar{X_i}-\bar{X_j}| \ge W$，则连个总体均值$\mu_i$和$\mu_j$不相等，其中：$W = q_\alpha(g,v)\sqrt{MSE/n}$。  
 MSE是自由度为v的样本组内均方差，$q_\alpha(g,v)$是比较g个不同总体是学生化极差的上侧尾部临界值，n是每个样本的观察值个数。
 
 ```R
+X <- c(4.2, 3.3, 3.7, 4.3, 4.1, 3.3, 4.5, 4.4, 3.5, 4.2, 4.6, 4.2, 5.6, 3.6, 4.5, 5.1, 4.9, 4.7)
+group <- factor(rep(LETTERS[1:3], each=6))
+mice.data <- data.frame(X, group)
+mice.aov <- aov(X~group, data = mice.data)
+
+mice.mean <- round(tapply(mice.data[,1], mice.data[,2], mean), 3)
+n <- length(mice.mean)
+mice.diff <- matrix(rep(mice.mean,times = n), nrow = n, byrow = T)
+colnames(mice.diff) <- LETTERS[1:n]
+rownames(mice.diff) <- LETTERS[1:n]
+for (i in c(1:n)){
+  mice.diff[i,] <- mice.diff[i,] - mice.mean[i]
+}
+
+mice.MSE = summary(mice.aov)[[1]]$`Mean Sq`[2]
 q <- qtukey(0.05, 3, 15, lower.tail = F)
+W <- q*sqrt(mice.MSE/6)
+mice.which <- which(mice.diff > W, arr.ind = T)
+
+result <- data.frame(NULL)
+for (i in c(1,dim(mice.which)[1])){
+  result[i,1] <- paste(LETTERS[mice.which[i,1]],LETTERS[mice.which[i,2]], sep = '-')
+  result[i,2] <- mice.diff[mice.which[i,1],mice.which[i,2]]
+}
+colnames(result) <- c('groups', 'value')
+result
+
+(posthoc <- TukeyHSD(mice.aov, 'group'))
 ```
