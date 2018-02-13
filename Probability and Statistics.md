@@ -15,7 +15,7 @@
   * [基本概念](#基本概念)
   * [单因素方差分析](#单因素方差分析)
   * [双因素方差分析](#双因素方差分析)
-  * 多重比较
+  * [多重比较](#多重比较)
   * 方差齐性的检验方法
 
 ## [基础](#目录)
@@ -453,7 +453,7 @@ kruskal.test(list(x, y, z))
 
 ### [基本概念](#目录)
 
-**方差分析** 是通过检验各总体均值是否相等来判断分类型变量对数值型变量是否有显著影响的统计检验方法，由费希尔剔除，故又称为**F检验**。  
+**方差分析** 是通过检验各总体均值是否相等来判断分类型变量对数值型变量是否有显著影响的统计检验方法，由费希尔提出，故又称为**F检验**。  
 方差分析中，将要检验的对象称为**因素**或**因子**，因素的不同表现称为**水平**或**处理**，每个水平下得到的样本数据称为**观察值**。  
 只有一个因素的方差分析称为**单因素方差分析**。在单因素分析中，涉及两个变量：一个是分类型变量（自变量），一个是数值型变量（因变量）。
 
@@ -530,4 +530,63 @@ $F_{A\times{B}} = \frac{MS_{A\times{B}}}{MS_E} = \frac{SS_{A\times{B}}/(r-1)(s-1
 
  my.aov <- aov(quality ~ supp * whey, data = pancakes)
  summary(my.aov) # 与上述的代码功能一致
+```
+
+### [多重比较](#目录)
+
+要得到各组均值间更详细的信息，需要在方差分析的基础上进行多个样本均值的两两比较，此方法称为**多重比较法**。  
+Bonferroni修正法的思路：如果在同一数据集同时进行n个独立的假设检验，那么用于每一个假设的统计显著水平应该为仅检验一个假设时显著水平的1/n，**即$\alpha' = \alpha/n$, n是多重t检验的次数**。
+
+**1. 多重t检验**
+
+多重t检验是对每个处理下的数据均值进行两两比较的t检验。多次重复使用t检验时会增大犯第一类错误的概率，因此在进行较多次重复比较时，要对**P值进行调整**。
+
+```R
+p.adjust.method # 输出P修正的方法
+pairwise.t.test() # 执行均值的多重t检验
+ -x # 响应向量
+ -g # 因子向量
+ -p.adjust.method # P值修正方法
+ -alternative
+ -paired
+
+ X <- c(4.2, 3.3, 3.7, 4.3, 4.1, 3.3, 4.5, 4.4, 3.5, 4.2, 4.6, 4.2, 5.6, 3.6, 4.5, 5.1, 4.9, 4.7)
+ A <- factor(rep(1:3, each=6))
+ pairwise.t.test(X,A,p.adjust.method = "bonferroni")
+```
+
+**2. Dunnett检验**
+
+Dunnett检验法是一种与对照组进行多重比较的方法。当进行多个实验组与一个对照组均值差别的多重比较，统计量定义为：$t_D = \frac{|\bar{X_i}-\bar{X_c}|}{\sqrt{MSE(\frac{1}{n_i} + \frac{1}{n_c}}}$  
+其中，$\bar{X_i}-\bar{X_c}$表示每个处理的均值与对照组均值之差，$n_i$是每个处理的样本容量，$n_c$是对照组的样本容量，MSE是残差均方（均方误差）。
+
+```R
+X <- c(4.2, 3.3, 3.7, 4.3, 4.1, 3.3, 4.5, 4.4, 3.5, 4.2, 4.6, 4.2, 5.6, 3.6, 4.5, 5.1, 4.9, 4.7)
+group <- factor(rep(LETTERS[1:3], each=6))
+mice.data <- data.frame(X, group)
+mice.aov <- aov(X~group, data = my.data)
+mice.mean <- round(tapply(mice.data[,1], mice.data[,2], mean), 3)
+mice.MSE = summary(my.aov)[[1]]$`Mean Sq`[2]
+(tBD = abs(mice.mean['A']-mice.mean['B'])/sqrt(mice.MSE*(1/6+1/6)))
+(tBD = abs(mice.mean['A']-mice.mean['C'])/sqrt(mice.MSE*(1/6+1/6)))
+
+glht() # 用该函数完成Dunnett检验
+library(multcomp)
+mice.Dunnett <- glht(mice.aov, linfct=mcp(group = "Dunnett"))
+summary(mice.Dunnett)
+
+# 可视化
+windows(width=5,height=3,pointsize=10)
+plot(mice.Dunnett,sub="Mice Data")
+mtext("Dunnet's Method",side=3,line=0.5)
+```
+
+**3. Tukey的HSD检验**
+
+该方法为了控制每一对比较的错误率。  
+在进行检验时，首先对g个样本均值进行排序。如果$|\bar{X_i}-\bar{X_j}| \ge W$，则连个总体均值$\mu_i$和$\mu_j$不相等，其中：$W = q_\alpha(g,v)\sqrt{MSE/n}$。  
+MSE是自由度为v的样本组内均方差，$q_\alpha(g,v)$是比较g个不同总体是学生化极差的上侧尾部临界值，n是每个样本的观察值个数。
+
+```R
+q <- qtukey(0.05, 3, 15, lower.tail = F)
 ```
