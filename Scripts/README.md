@@ -6,13 +6,11 @@
 
 1. **[读取网页菜单](https://github.com/Happykelee/the-Study-of-R/blob/master/Scripts/01_GetMenu.R)**
     * **2018/01/31 记录**
-
     某年某月某日，部门经理要求同事将某饭店的菜单整理成表格供她挑选。由于饭店的所有菜品都放在了某点评的网页上，手动一个一个弄极为麻烦。反正菜单页面为静态网页，当前所学足够用，所以就写个小脚本弄了一个xls形式的[菜单表](https://github.com/Happykelee/the-Study-of-R/blob/master/Scripts/01_menu.xls)。
 
 
 2. **[计算染色体非整倍体的嵌合比例](https://github.com/Happykelee/the-Study-of-R/blob/master/Scripts/02_MosiacRatio.R)**
     * **2018/01/31 记录**
-
     虽然在BerryGenomics作临床数据分析和解读，根本就不需要怎么编程（被招我的HR坑了），显然这并不是我选择这份工作的初衷。所以，用自己三脚猫的水平抽空解决一个工作中的小问题——计算染色体的嵌合比例。
 
     **读入文件要求**：包含一个批次的所有染色体比例的xls表格；  
