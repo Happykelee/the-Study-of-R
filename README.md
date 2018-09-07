@@ -35,9 +35,9 @@
   * [其他](#其他)
 * [重要函数](#重要函数)
   * [报错警告类](#报错警告类)
-* [概率与统计](https://github.com/Happykelee/the-Study-of-R/blob/master/Probability%20and%20Statistics.md)
+* [概率与统计](Probability%20and%20Statistics.md)
 * [机器学习](https://github.com/Happykelee/Machine-Learning/tree/master/R)
-* [练习小脚本](https://github.com/Happykelee/the-Study-of-R/tree/master/Scripts)
+* [练习小脚本](Scripts)
 
 ## [基本操作](#目录)
 
