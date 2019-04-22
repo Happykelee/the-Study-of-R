@@ -37,6 +37,7 @@
   * [报错警告类](#报错警告类)
 * [概率与统计](Probability%20and%20Statistics.md)
 * [机器学习](https://github.com/Happykelee/Machine-Learning/tree/master/R)
+* [脑部数据预处理](https://github.com/Happykelee/BrainImaging_PreProcess/tree/master)
 * [练习小脚本](Scripts)
 
 ## [基本操作](#目录)
