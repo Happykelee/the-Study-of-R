@@ -83,16 +83,21 @@ edit()
 ```
 
 ```R
-# 包的使用
+# 包的安装
 install.packages('')
  # dependencies=TRUE (安装依赖包)
 installed.packages()
  rownames(installed.packages()) # 查看已经安装的包名
 available.packages()
 
+# 包的加载己搜索
 search()
 library()
 require()
+
+# 加载多个包
+ x<-c("plyr", "psych", "tm")
+ lapply(x, require, character.only = TRUE)
 ```
 
 ```R
