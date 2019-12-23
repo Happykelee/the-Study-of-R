@@ -545,7 +545,7 @@ summary(my.aov)
 * **总变异：** $SS_T = \sum_{i=1}^{a}\sum_{j=1}^{b}(x_{ij}-\bar{x})^2 = SS_A+SS_B+SS_E, df_T=ab-1$
 * **因素A组间变异：** $SS_A = \sum_{i=1}^{a}\sum_{j=1}^{b}(\bar{x_i}-\bar{x})^2=\sum_{i=1}^{a}b(\bar{x_i}-\bar{x})^2, df_A=a-1$
 * **因素B组间变异：** $SS_B = \sum_{i=1}^{a}\sum_{j=1}^{b}(\bar{x_j}-\bar{x})^2=\sum_{j=1}^{b}a(\bar{x_j}-\bar{x})^2, df_B=b-1$
-* **随机误差平方和：** $SS_E = \sum_{i=1}^{r}\sum_{j=1}^{k}(x_{ij}-\bar{x_i}-\bar{x_j}-\bar{x})^2, df_E=(a-1)(b-1)$
+* **随机误差平方和：** $SS_E = \sum_{i=1}^{a}\sum_{j=1}^{b}(x_{ij}-\bar{x_i}-\bar{x_j}-\bar{x})^2, df_E=(a-1)(b-1)$
 * **均方差：** $MS_A = \frac{SS_A}{a-1}, MS_B = \frac{SS_B}{b-1}, MS_E = \frac{SS_E}{(a-1)(b-1)}$
 * **F统计量：** $F_A = \frac{MS_A}{MS_E}$ ~ $F(a-1,(a-1)(b-1)), \\ F_B = \frac{MS_B}{MS_E}$ ~ $F(b-1,(a-1)(b-1))$
 
@@ -562,8 +562,8 @@ summary(my.aov)
 * **总变异：** $SS_T = \sum_{i=1}^{a}\sum_{j=1}^{b}\sum_{k=1}^{c}(x_{ijk}-\bar{x})^2 = SS_A+SS_A+SS_E+SS_{AB}, 其中，c为给定i和j后组内数据量。$
 * **因素A组间变异：** $SS_A = bc\sum_{i=1}^{a}(\bar{x_i}-\bar{x})^2,df_A=a-1$
 * **因素B组间变异：** $SS_B = ac\sum_{j=1}^{b}(\bar{x_j}-\bar{x})^2,df_B=b-1$
-* **交互变异：** $SS_{AB} = c\sum_{i=1}^{r}\sum_{j=1}^{s}(\bar{x_{ij}}-\bar{x_i}-\bar{x_j}+\bar{x})^2,df_{AB}=(a-1)(b-1)$
-* **随机误差平方和：** $SS_E = \sum_{i=1}^{a}\sum_{j=1}^{b}\sum_{k=1}^{c}(x_{ijk}-\bar{x_{ij}}-\bar{x_i}-\bar{x_j}+\bar{x})^2,df_E=ab(c-1)$
+* **交互变异：** $SS_{AB} = \sum_{i=1}^{a}\sum_{j=1}^{b}c(\bar{x_{ij}}-\bar{x_i}-\bar{x_j}+\bar{x})^2,df_{AB}=(a-1)(b-1)$
+* **随机误差平方和：** $SS_E = \sum_{i=1}^{a}\sum_{j=1}^{b}\sum_{k=1}^{c}(x_{ijk}-\bar{x_{ij}})^2,df_E=ab(c-1)$
 * **F统计量：** $F_A = \frac{MS_A}{MS_E} = \frac{SS_A/(a-1)}{SS_E/[ab(c-1)]} \sim F(a-1,ab(c-1)),\\ F_B = \frac{MS_B}{MS_E} = \frac{SS_B/(b-1)}{SS_E/[ab(c-1)]} \sim F(b-1,ab(c-1)),\\ F_{AB} = \frac{MS_{AB}}{MS_E} = \frac{SS_{AB}/(a-1)(b-1)}{SS_E/[ab(c-1)]} \sim F((a-1)(b-1),ab(c-1))$
 
 ```R
