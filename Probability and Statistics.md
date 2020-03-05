@@ -545,7 +545,7 @@ summary(my.aov)
 * **总变异：** $SS_T = \sum_{i=1}^{a}\sum_{j=1}^{b}(x_{ij}-\bar{x})^2 = SS_A+SS_B+SS_E, df_T=ab-1$
 * **因素A组间变异：** $SS_A = \sum_{i=1}^{a}\sum_{j=1}^{b}(\bar{x_i}-\bar{x})^2=\sum_{i=1}^{a}b(\bar{x_i}-\bar{x})^2, df_A=a-1$
 * **因素B组间变异：** $SS_B = \sum_{i=1}^{a}\sum_{j=1}^{b}(\bar{x_j}-\bar{x})^2=\sum_{j=1}^{b}a(\bar{x_j}-\bar{x})^2, df_B=b-1$
-* **随机误差平方和：** $SS_E = \sum_{i=1}^{a}\sum_{j=1}^{b}(x_{ij}-\bar{x_i}-\bar{x_j}-\bar{x})^2, df_E=(a-1)(b-1)$
+* **随机误差平方和：** $SS_E = \sum_{i=1}^{a}\sum_{j=1}^{b}(x_{ij}-\bar{x_i}-\bar{x_j}+\bar{x})^2, df_E=(a-1)(b-1)$
 * **均方差：** $MS_A = \frac{SS_A}{a-1}, MS_B = \frac{SS_B}{b-1}, MS_E = \frac{SS_E}{(a-1)(b-1)}$
 * **F统计量：** $F_A = \frac{MS_A}{MS_E}$ ~ $F(a-1,(a-1)(b-1)), \\ F_B = \frac{MS_B}{MS_E}$ ~ $F(b-1,(a-1)(b-1))$
 
